@@ -3,6 +3,9 @@ dropwizard-web-security
 [![Circle CI](https://circleci.com/gh/palantir/dropwizard-web-security.svg?style=shield&circle-token=52b148126fda6cfba213cb832ff733d04d0d7277)](https://circleci.com/gh/palantir/dropwizard-web-security)
 [![Download](https://api.bintray.com/packages/palantir/releases/dropwizard-web-security/images/download.svg) ](https://bintray.com/palantir/releases/dropwizard-web-security/_latestVersion)
 
+**THIS IS A FORK OF THE UNMAINTAINED
+[dropwizard-web-security](https://github.com/palantir/dropwizard-web-security).**
+
 A bundle for applying default web security functionality to a dropwizard application. It covers the following areas:
 
 - [Cross-Origin Resource Sharing (CORS)][cors1] [\[2\]][cors2] [\[3\]][cors3]
@@ -146,8 +149,14 @@ Before working on the code, if you plan to contribute changes, please read the [
 
 License
 -------
-This project is made available under the [Apache 2.0 License][license].
 
+Copyright (c) 2023 brightSPARK Labs (from commit `c2774cac049bb0007d14790527ea2499670fef83`
+onwards). All rights reserved.
+
+Copyright (c) 2016 Palantir Technologies Inc (to and including commit
+`c2774cac049bb0007d14790527ea2499670fef83`). All rights reserved.
+
+This project is made available under the [Apache 2.0 License][license].
 
 [cors1]: https://www.w3.org/TR/cors/
 [cors2]: https://www.owasp.org/index.php/CORS_OriginHeaderScrutiny
