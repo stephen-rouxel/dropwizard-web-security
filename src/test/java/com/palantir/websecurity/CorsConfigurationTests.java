@@ -13,7 +13,7 @@ import io.dropwizard.validation.ValidationMethod;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /** Tests for {@link CorsConfiguration}. */
 public final class CorsConfigurationTests {

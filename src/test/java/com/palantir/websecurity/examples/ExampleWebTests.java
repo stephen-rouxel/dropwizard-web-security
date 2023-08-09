@@ -10,22 +10,23 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.google.common.net.HttpHeaders;
 import io.dropwizard.client.JerseyClientBuilder;
-import io.dropwizard.testing.junit.DropwizardAppRule;
+import io.dropwizard.testing.junit5.DropwizardAppExtension;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientProperties;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /** Tests for {@link Example.ExampleWebApplication}. */
 public final class ExampleWebTests {
 
     public static final String ORIGIN_VALUE = "http://origin.com";
 
-    @ClassRule
-    public static final DropwizardAppRule<Example.ExampleConfiguration> RULE =
-            new DropwizardAppRule<>(
+    @ExtendWith(DropwizardExtensionsSupport.class)
+    public static final DropwizardAppExtension<Example.ExampleConfiguration> RULE =
+            new DropwizardAppExtension<>(
                     Example.ExampleWebApplication.class,
                     Example.ExampleWebApplication.class
                             .getClassLoader()
@@ -34,8 +35,8 @@ public final class ExampleWebTests {
 
     private static Client client;
 
-    @BeforeClass
-    public static void beforeClass() {
+    @BeforeAll
+    public static void BeforeAll() {
         client =
                 new JerseyClientBuilder(RULE.getEnvironment())
                         .withProperty(ClientProperties.CONNECT_TIMEOUT, 10000)
