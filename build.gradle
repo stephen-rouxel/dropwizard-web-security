@@ -4,13 +4,15 @@
 
 plugins {
     // Apply the brightSPARK Labs plugin for standardisation.
-    id 'com.brightsparklabs.gradle.baseline' version "4.2.0"
+    id 'com.brightsparklabs.gradle.baseline' version "4.3.0"
 
     id 'java'
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 // -----------------------------------------------------------------------------
 // PROJECT IDENTIFICATION
@@ -26,7 +28,10 @@ project.ext.scm      = 'scm:git@github.com:brightsparklabs/dropwizard-web-securi
 
 bslBaseline {
     licenseHeader = """/*
-                      | * (c) Copyright 2016 Palantir Technologies Inc. All rights reserved.
+                      | * (c) Copyright 2016-2017 Palantir Technologies Inc. All rights reserved.
+                      | *
+                      | * (c) Copyright 2023 brightSPARK Labs (from commit `c2774cac049bb0007d14790527ea2499670fef83` onwards).
+                      | * All rights reserved.
                       | */
         """.stripMargin("|")
 }
@@ -42,7 +47,7 @@ repositories {
 
 dependencies {
     def versions = [
-        dropwizard: '4.0.0',
+        dropwizard: '4.0.4',
         immutables: '2.9.3',
     ]
     // These dependencies are found on compile classpath of this component and consumers.
@@ -65,9 +70,9 @@ dependencies {
             "io.dropwizard:dropwizard-assets:${versions.dropwizard}",
             "io.dropwizard:dropwizard-client:${versions.dropwizard}",
             "io.dropwizard:dropwizard-testing:${versions.dropwizard}",
-            'org.junit.jupiter:junit-jupiter-api:5.10.0',
-            'org.mockito:mockito-core:5.4.0',
-            'org.springframework:spring-test:6.0.11',
+            'org.junit.jupiter:junit-jupiter-api:5.10.1',
+            'org.mockito:mockito-core:5.7.0',
+            'org.springframework:spring-test:6.1.0',
             'jakarta.validation:jakarta.validation-api:3.0.2',
             )
 

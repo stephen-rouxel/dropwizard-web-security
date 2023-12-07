@@ -18,11 +18,11 @@ Usage
 
     ```groovy
     repository {
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        compile 'com.palantir.websecurity:dropwizard-web-security:<latest-version>'
+        compile 'com.brightsparklabs:dropwizard-web-security:<latest-version>'
     }
     ```
 
@@ -44,15 +44,14 @@ Usage
 
 3. Add the bundle to your application.
 
-	```java
-	public class ExampleApplication extends Application<ExampleConfiguration> {
+    ```java
+    public class ExampleApplication extends Application<ExampleConfiguration> {
 
-	    @Override
-	    public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
-	        bootstrap.addBundle(new WebSecurityBundle());
-	    }
+        @Override
+        public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
+            bootstrap.addBundle(new WebSecurityBundle());
+        }
     }
-
     ```
 
 

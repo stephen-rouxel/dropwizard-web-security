@@ -1,5 +1,8 @@
 /*
- * (c) Copyright 2016 Palantir Technologies Inc. All rights reserved.
+ * (c) Copyright 2016-2017 Palantir Technologies Inc. All rights reserved.
+ *
+ * (c) Copyright 2023 brightSPARK Labs (from commit `c2774cac049bb0007d14790527ea2499670fef83` onwards).
+ * All rights reserved.
  */
 
 package com.palantir.websecurity;
@@ -58,14 +61,28 @@ public abstract class CorsConfiguration {
     /** If set, will be used to set the initial property {@code preflightMaxAge}. */
     public abstract Optional<Long> preflightMaxAge();
 
+    /**
+     * This method is never explicitly called which causes errorprone warnings, however it is
+     * implicitly called by dropwizard
+     * (https://www.dropwizard.io/en/stable/manual/validation.html#annotations). We should supress
+     * this warning as we know that it being unused is not problematic.
+     */
     @ValidationMethod(message = "preflightMaxAge can't be negative")
+    @SuppressWarnings("unused")
     private boolean isPreflightMaxAgeNegative() {
         return preflightMaxAge().or(0L) >= 0L;
     }
 
+    /**
+     * This method is never explicitly called which causes errorprone warnings, however it is
+     * implicitly called by dropwizard
+     * (https://www.dropwizard.io/en/stable/manual/validation.html#annotations). We should supress
+     * this warning as we know that it being unused is not problematic.
+     */
     @ValidationMethod(
             message =
                     "allowedOrigins can't contain malformed URLs, URLs with a path, or malformed regex")
+    @SuppressWarnings("unused")
     private boolean isAllowedOriginsValid() {
         if (!allowedOrigins().isPresent()) {
             return true;
