@@ -2,6 +2,8 @@ dropwizard-web-security
 =======================
 [![Build Status](https://github.com/brightsparklabs/dropwizard-web-security/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/brightsparklabs/dropwizard-web-security/actions/workflows/unit_tests.yml)
 [![Maven](https://img.shields.io/maven-central/v/com.brightsparklabs/dropwizard-web-security)](https://search.maven.org/artifact/com.brightsparklabs/dropwizard-web-security)
+
+
 **THIS IS A FORK OF THE UNMAINTAINED
 [dropwizard-web-security](https://github.com/palantir/dropwizard-web-security).**
 
