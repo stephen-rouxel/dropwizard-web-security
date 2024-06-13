@@ -1,8 +1,7 @@
 dropwizard-web-security
 =======================
-[![Circle CI](https://circleci.com/gh/palantir/dropwizard-web-security.svg?style=shield&circle-token=52b148126fda6cfba213cb832ff733d04d0d7277)](https://circleci.com/gh/palantir/dropwizard-web-security)
-[![Download](https://api.bintray.com/packages/palantir/releases/dropwizard-web-security/images/download.svg) ](https://bintray.com/palantir/releases/dropwizard-web-security/_latestVersion)
-
+[![Build Status](https://github.com/brightsparklabs/dropwizard-web-security/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/brightsparklabs/dropwizard-web-security/actions/workflows/unit_tests.yml)
+[![Maven](https://img.shields.io/maven-central/v/com.brightsparklabs/dropwizard-web-security)](https://search.maven.org/artifact/com.brightsparklabs/dropwizard-web-security)
 **THIS IS A FORK OF THE UNMAINTAINED
 [dropwizard-web-security](https://github.com/palantir/dropwizard-web-security).**
 
