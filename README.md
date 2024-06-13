@@ -1,7 +1,8 @@
-dropwizard-web-security
-=======================
-[![Circle CI](https://circleci.com/gh/palantir/dropwizard-web-security.svg?style=shield&circle-token=52b148126fda6cfba213cb832ff733d04d0d7277)](https://circleci.com/gh/palantir/dropwizard-web-security)
-[![Download](https://api.bintray.com/packages/palantir/releases/dropwizard-web-security/images/download.svg) ](https://bintray.com/palantir/releases/dropwizard-web-security/_latestVersion)
+# dropwizard-web-security
+
+[![Build Status](https://github.com/brightsparklabs/dropwizard-web-security/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/brightsparklabs/dropwizard-web-security/actions/workflows/unit_tests.yml)
+[![Maven](https://img.shields.io/maven-central/v/com.brightsparklabs/dropwizard-web-security)](https://search.maven.org/artifact/com.brightsparklabs/dropwizard-web-security)
+
 
 **THIS IS A FORK OF THE UNMAINTAINED
 [dropwizard-web-security](https://github.com/palantir/dropwizard-web-security).**
@@ -12,17 +13,29 @@ A bundle for applying default web security functionality to a dropwizard applica
 - Web Application Security Headers ([Content Security Policy][csp], etc.)
 
 
-Usage
------
+## Compatibility
+
+| Bundle Version | Dropwizard Version | Java Version | Notes
+| -------------- | ------------------ | ------------ | ---------
+| 2.x.y          | 3.x.y              | 17           |
+Dropwizard 3.0 [changed core dropwizard
+packages](https://www.dropwizard.io/en/stable/manual/upgrade-notes/upgrade-notes-3_0_x.html#dropwizard-package-structure-and-jpms).
+Dropwizard 4.0 [transitioned to
+Jakarta](https://www.dropwizard.io/en/stable/manual/upgrade-notes/upgrade-notes-4_0_x.html#transition-to-jakarta-ee).
+| 1.x.y          | 1.x.y              | 8            | Initial release
+
+
+## Usage
+
 1. Add the dependency to your project.
 
     ```groovy
     repository {
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        compile 'com.palantir.websecurity:dropwizard-web-security:<latest-version>'
+        compile 'com.brightsparklabs:dropwizard-web-security:<latest-version>'
     }
     ```
 
@@ -44,20 +57,19 @@ Usage
 
 3. Add the bundle to your application.
 
-	```java
-	public class ExampleApplication extends Application<ExampleConfiguration> {
+    ```java
+    public class ExampleApplication extends Application<ExampleConfiguration> {
 
-	    @Override
-	    public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
-	        bootstrap.addBundle(new WebSecurityBundle());
-	    }
+        @Override
+        public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
+            bootstrap.addBundle(new WebSecurityBundle());
+        }
     }
-
     ```
 
 
-Configuration
--------------
+## Configuration
+
 App Security headers are **added by default**. The following are the default values, **only specify values in your
 configuration if they differ from the default values shown below**.
 
@@ -72,8 +84,8 @@ webSecurity:
 **NOTE:** To disable a specific header, set the value to `""`.
 
 
-CORS Configuration
-------------------
+## CORS Configuration
+
 CORS is **disabled by default**. To enable CORS, set the `allowedOrigins` method to a non-empty string.
 
 The following are the default values, only specify values if they differ from the default values shown below.
@@ -98,8 +110,7 @@ webSecurity:
 - `allowedMethods` - set to include a default set of commonly used methods
 
 
-Advanced Usage
---------------
+## Advanced Usage
 
 ### App-Specific Settings
 You can customize your application's defaults by defining it inside of your Dropwizard application. Any value not set
@@ -142,13 +153,12 @@ WebSecurityHeaderInjector injector = new WebSecurityHeaderInjector(webSecurityBu
 ```
 
 
-Contributing
-------------
+## Contributing
+
 Before working on the code, if you plan to contribute changes, please read the [CONTRIBUTING](CONTRIBUTING.md) document.
 
 
-License
--------
+## License
 
 Copyright (c) 2023 brightSPARK Labs (from commit `c2774cac049bb0007d14790527ea2499670fef83`
 onwards). All rights reserved.

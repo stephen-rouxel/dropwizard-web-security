@@ -1,55 +1,177 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url 'http://palantir.bintray.com/releases' }
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
+// -----------------------------------------------------------------------------
+// PLUGINS
+// -----------------------------------------------------------------------------
 
-    dependencies {
-        classpath 'com.palantir.baseline:gradle-baseline-java:0.17.1'
-        classpath 'com.palantir.configurationresolver:gradle-configuration-resolver-plugin:0.3.0'
-        classpath 'com.palantir.gradle.gitversion:gradle-git-version:0.9.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
-        classpath 'gradle.plugin.org.inferred:gradle-processors:1.2.15'
-    }
+plugins {
+    // Apply the brightSPARK Labs plugin for standardisation.
+    id 'com.brightsparklabs.gradle.baseline' version "4.4.0"
+
+    id 'java'
+    id 'maven-publish'
+
+    // -----------------------------------------------------------------------------
+    // PUBLISHING
+    // -----------------------------------------------------------------------------
+
+    // Maven Central requires artifacts to be signed.
+    id 'signing'
+
+    // Maven Central publishing needs to be fed through Nexus.
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
 }
 
-apply plugin: 'java'
-apply plugin: 'com.palantir.git-version'
-apply plugin: 'com.palantir.baseline-config'
-apply plugin: 'com.palantir.baseline-idea'
-apply plugin: 'com.palantir.baseline-eclipse'
-apply plugin: 'com.palantir.baseline-checkstyle'
-apply plugin: 'org.inferred.processors'  // installs the "processor" configuration needed for baseline-error-prone
-apply plugin: 'com.palantir.baseline-error-prone'
-apply plugin: 'com.palantir.configuration-resolver'
-apply from: "${rootDir}/gradle/publish.gradle"
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+// -----------------------------------------------------------------------------
+// PROJECT IDENTIFICATION
+// -----------------------------------------------------------------------------
+
+project.description  = 'Bundle for applying default web security functionality to a dropwizard application'
+project.ext.url      = 'https://github.com/brightsparklabs/dropwizard-web-security'
+project.ext.scm      = 'scm:git@github.com:brightsparklabs/dropwizard-web-security.git'
+
+// -----------------------------------------------------------------------------
+// SETUP BASELINE PLUGIN
+// -----------------------------------------------------------------------------
+
+bslBaseline {
+    licenseHeader = """/*
+                      | * (c) Copyright 2016-2017 Palantir Technologies Inc. All rights reserved.
+                      | *
+                      | * (c) Copyright 2023 brightSPARK Labs (from commit `c2774cac049bb0007d14790527ea2499670fef83` onwards).
+                      | * All rights reserved.
+                      | */
+        """.stripMargin("|")
+}
+
+// -----------------------------------------------------------------------------
+// REPOSITORIES/DEPENDENCIES
+// -----------------------------------------------------------------------------
 
 repositories {
-    jcenter()
-    maven { url 'http://palantir.bintray.com/releases' }
+    // Use mavenCentral for resolving dependencies.
+    mavenCentral()
 }
 
 dependencies {
-    baseline 'com.palantir.baseline:gradle-baseline-java-config:0.17.1@zip'
+    def versions = [
+        dropwizard: '4.0.7',
+        immutables: '2.10.1',
+    ]
+    // These dependencies are found on compile classpath of this component and consumers.
+    implementation(
+            // General
+            'com.google.guava:guava:33.2.1-jre',
 
-    compile "io.dropwizard:dropwizard-core:$dropwizardVersion"
+            // Dropwizard
+            "io.dropwizard:dropwizard-core:${versions.dropwizard}",
+            )
 
-    processor "org.immutables:value:$immutablesVersion"
+    compileOnly(
+            "org.immutables:value:${versions.immutables}",
+            // We add this so that Immutables will annotate its generated classes with
+            // @SuppressFBWarnings, and thus avoid Findbugs errors for those generated classes.
+            'com.google.code.findbugs:annotations:3.0.1u2'
+            )
 
-    testCompile "io.dropwizard:dropwizard-assets:$dropwizardVersion"
-    testCompile "io.dropwizard:dropwizard-client:$dropwizardVersion"
-    testCompile "io.dropwizard:dropwizard-testing:$dropwizardVersion"
-    testCompile "junit:junit:$junitVersion"
-    testCompile "org.mockito:mockito-core:$mockitoVersion"
-    testCompile "org.springframework:spring-test:$springTestVersion"
+    testImplementation(
+            "io.dropwizard:dropwizard-assets:${versions.dropwizard}",
+            "io.dropwizard:dropwizard-client:${versions.dropwizard}",
+            "io.dropwizard:dropwizard-testing:${versions.dropwizard}",
+            'org.junit.jupiter:junit-jupiter-api:5.10.2',
+            'org.mockito:mockito-core:5.12.0',
+            'org.springframework:spring-test:6.1.8',
+            'jakarta.validation:jakarta.validation-api:3.1.0',
+            )
+
+    annotationProcessor(
+            "org.immutables:value:${versions.immutables}",
+            )
 }
 
-javadoc {
-    options.addStringOption('Xdoclint:none', '-quiet')
+// -----------------------------------------------------------------------------
+// SETUP ARTIFACTS FOR PUBLISHING
+// -----------------------------------------------------------------------------
+
+// Maven Central requires javadoc and sources.
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
-group 'com.palantir.websecurity'
-version gitVersion()
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.name
+            version project.version
+            from components.java
 
-sourceCompatibility = 1.8
+            // Maven Central requires specific POM attributes.
+            pom {
+                name = project.name
+                description = project.description
+                url = project.url
+
+                scm {
+                    connection = project.scm
+                    developerConnection = project.scm
+                    url = project.scm
+                }
+
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'brightsparklabs'
+                        name = 'brightSPARK Labs'
+                        email = 'enquire@brightsparklabs.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Maven Central requires signed artifacts.
+signing {
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.mavenJava
+
+    // Only require signing when publishing (otherwise normal builds would need GPG keys).
+    required { gradle.taskGraph.hasTask("publishToSonatype") }
+}
+
+// -----------------------------------------------------------------------------
+// PUBLISH ARTIFACTS (via nexus)
+// -----------------------------------------------------------------------------
+
+nexusPublishing {
+    repositories {
+        // Credentials default to:
+        // - Property `sonatypeUsername` or ENV variable `ORG_GRADLE_PROJECT_sonatypeUsername`.
+        // - Property `sonatypePassword` or ENV variable ORG_GRADLE_PROJECT_sonatypePassword`.
+        sonatype()
+    }
+}
+
+task prePublishToMavenCentral {
+    group 'brightSPARK Labs - Maven Central Publishing'
+    description 'Stages the release on Sonatype ready for publishing to Maven Central.'
+    dependsOn 'publishToSonatype', 'closeSonatypeStagingRepository'
+}
+task publishToMavenCentral {
+    group 'brightSPARK Labs - Maven Central Publishing'
+    description 'Publishes the release to Maven Central.'
+    dependsOn 'publishToSonatype', 'closeAndReleaseSonatypeStagingRepository'
+}
