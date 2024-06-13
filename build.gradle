@@ -7,6 +7,13 @@ plugins {
     id 'com.brightsparklabs.gradle.baseline' version "4.4.0"
 
     id 'java'
+
+    id 'maven-publish'
+    // Maven Central requires artifacts to be signed.
+    id 'signing'
+
+    // Maven Central publishing needs to be fed through Nexus.
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
 }
 
 java {
